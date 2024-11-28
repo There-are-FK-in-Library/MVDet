@@ -85,7 +85,7 @@ class MultiviewX(VisionDataset):
         fp_calibration.release()
 
         rotation_matrix, _ = cv2.Rodrigues(rvec)
-        translation_matrix = np.array(tvec, dtype=np.float).reshape(3, 1)
+        translation_matrix = np.array(tvec, dtype=np.float32).reshape(3, 1)
         extrinsic_matrix = np.hstack((rotation_matrix, translation_matrix))
 
         return intrinsic_matrix, extrinsic_matrix
@@ -111,7 +111,7 @@ class MultiviewX(VisionDataset):
 
 def test():
     from multiview_detector.utils.projection import get_imagecoord_from_worldcoord
-    dataset = MultiviewX(os.path.expanduser('~/Data/MultiviewX'), )
+    dataset = MultiviewX(os.path.expanduser('D:/WJ/Pycharm_workspace/MVDet/Data/MultiviewX'), )
     pom = dataset.read_pom()
 
     foot_3ds = dataset.get_worldcoord_from_pos(np.arange(np.product(dataset.worldgrid_shape)))

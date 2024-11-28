@@ -1,6 +1,7 @@
 import os
 
 os.environ['OMP_NUM_THREADS'] = '1'
+
 import argparse
 import sys
 import shutil
@@ -22,6 +23,12 @@ from multiview_detector.utils.draw_curve import draw_curve
 from multiview_detector.utils.image_utils import img_color_denormalize
 from multiview_detector.trainer import PerspectiveTrainer
 
+print("Available devices:")
+print(torch.cuda.device_count())
+for i in range(torch.cuda.device_count()):
+    print(torch.cuda.get_device_name(i))
+print(torch.cuda.device_count())
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 def main(args):
     # seed
@@ -42,7 +49,7 @@ def main(args):
         data_path = os.path.expanduser('~/Data/Wildtrack')
         base = Wildtrack(data_path)
     elif 'multiviewx' in args.dataset:
-        data_path = os.path.expanduser('~/Data/MultiviewX')
+        data_path = os.path.expanduser('D:/WJ/Pycharm_workspace/MVDet/Data/MultiviewX')
         base = MultiviewX(data_path)
     else:
         raise Exception('must choose from [wildtrack, multiviewx]')
@@ -100,7 +107,7 @@ def main(args):
     # learn
     if args.resume is None:
         print('Testing...')
-        trainer.test(test_loader, os.path.join(logdir, 'test.txt'), train_set.gt_fpath, True)
+        trainer.test(test_loader, os.path.join(logdir, 'test.txt'), train_set.gt_fpath, False)
 
         for epoch in tqdm.tqdm(range(1, args.epochs + 1)):
             print('Training...')
@@ -137,8 +144,8 @@ if __name__ == '__main__':
     parser.add_argument('--variant', type=str, default='default',
                         choices=['default', 'img_proj', 'res_proj', 'no_joint_conv'])
     parser.add_argument('--arch', type=str, default='resnet18', choices=['vgg11', 'resnet18'])
-    parser.add_argument('-d', '--dataset', type=str, default='wildtrack', choices=['wildtrack', 'multiviewx'])
-    parser.add_argument('-j', '--num_workers', type=int, default=4)
+    parser.add_argument('-d', '--dataset', type=str, default='multiviewx', choices=['wildtrack', 'multiviewx'])
+    parser.add_argument('-j', '--num_workers', type=int, default=0)
     parser.add_argument('-b', '--batch_size', type=int, default=1, metavar='N',
                         help='input batch size for training (default: 1)')
     parser.add_argument('--epochs', type=int, default=10, metavar='N', help='number of epochs to train (default: 10)')

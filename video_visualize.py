@@ -21,7 +21,7 @@ def _traget_transform(target, kernel):
 def test(dataset_name='multiviewx'):
     if dataset_name == 'multiviewx':
         result_fpath = '/home_ssd/houyz/Code/multiview_one_stage/logs/multiviewx_frame_40/default/2020-03-03_01-05-16/test.txt'
-        dataset = frameDataset(MultiviewX(os.path.expanduser('~/Data/MultiviewX')), False,
+        dataset = frameDataset(MultiviewX(os.path.expanduser('D:/WJ/Pycharm_workspace/MVDet/Data/MultiviewX')), False,
                                T.Compose([T.Resize([270, 480]), T.ToTensor(), ]))
     elif dataset_name == 'wildtrack':
         result_fpath = '/home_ssd/houyz/Code/multiview_one_stage/logs/wildtrack_frame/default/2020-03-04_15-45-27/test.txt'
